@@ -48,5 +48,59 @@ namespace System
         {
             return date.Date.AddDays(1 - date.Day);
         }
+
+        /// <summary>
+        /// Returns true if the <paramref name="date"/> falls on a weekend.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static bool IsWeekend(this DateTime date)
+        {
+            return date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday;
+        }
+
+        /// <summary>
+        /// Returns true if the <paramref name="date"/> does not fall on a weekend.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static bool IsWorkday(this DateTime date)
+        {
+            return !IsWeekend(date);
+        }
+
+        /// <summary>
+        /// Gets week number the year fall on (US version, where week 1 begins on the first Monday of the Year)
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static int GetWeekNumber(this DateTime date)
+        {
+            DateTime firstMonday = date.GetFirstMondayOfYear();
+
+            return 1 + (date.DayOfYear - firstMonday.DayOfYear) / 7;
+        }
+
+        /// <summary>
+        /// Gets first monday of the year
+        /// </summary>
+        /// <param name="year"></param>
+        /// <returns></returns>
+        public static DateTime GetFirstMondayOfYear(this DateTime year)
+        {
+            DateTime firstDay = new DateTime(year.Year, 1, 1);
+
+            if (firstDay.DayOfWeek == DayOfWeek.Monday)
+                return firstDay;
+
+            if (firstDay.DayOfWeek == DayOfWeek.Sunday)
+                return firstDay.AddDays(1);
+
+            firstDay = firstDay.AddDays(8 - (int)firstDay.DayOfWeek);
+
+            //Debug.Assert(firstDay.DayOfWeek == DayOfWeek.Monday);
+
+            return firstDay;
+        }
     }
 }

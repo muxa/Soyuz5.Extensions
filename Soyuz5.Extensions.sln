@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soyuz5.Extensions", "Soyuz5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soyuz5.Extensions.Tests", "Soyuz5.Extensions.Tests\Soyuz5.Extensions.Tests.csproj", "{D3A1BEE5-1C7A-4474-9AE7-C5B8D021A580}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soyuz5.Extensions.WinForms", "Soyuz5.Extensions.WinForms\Soyuz5.Extensions.WinForms.csproj", "{76A080C6-B13B-4B9F-B303-CE794D3CD379}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soyuz5.Extensions.Web", "Soyuz5.Extensions.Web\Soyuz5.Extensions.Web.csproj", "{F553B8F7-C62A-4A18-9ABB-11E17E1E1EAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +23,14 @@ Global
 		{D3A1BEE5-1C7A-4474-9AE7-C5B8D021A580}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3A1BEE5-1C7A-4474-9AE7-C5B8D021A580}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3A1BEE5-1C7A-4474-9AE7-C5B8D021A580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76A080C6-B13B-4B9F-B303-CE794D3CD379}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76A080C6-B13B-4B9F-B303-CE794D3CD379}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76A080C6-B13B-4B9F-B303-CE794D3CD379}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76A080C6-B13B-4B9F-B303-CE794D3CD379}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F553B8F7-C62A-4A18-9ABB-11E17E1E1EAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F553B8F7-C62A-4A18-9ABB-11E17E1E1EAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F553B8F7-C62A-4A18-9ABB-11E17E1E1EAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F553B8F7-C62A-4A18-9ABB-11E17E1E1EAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

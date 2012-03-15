@@ -36,6 +36,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,10 +44,30 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CollectionExtensionsTests.cs" />
+    <Compile Include="ConversionExtensionsTests.cs" />
+    <Compile Include="DateTimeExtensionsTests.cs" />
+    <Compile Include="SerializationExtensionsTests.cs" />
+    <Compile Include="DynamicHelpersTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StringExtensionsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Soyuz5.Extensions.Web\Soyuz5.Extensions.Web.csproj">
+      <Project>{F553B8F7-C62A-4A18-9ABB-11E17E1E1EAE}</Project>
+      <Name>Soyuz5.Extensions.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Soyuz5.Extensions.WinForms\Soyuz5.Extensions.WinForms.csproj">
+      <Project>{76A080C6-B13B-4B9F-B303-CE794D3CD379}</Project>
+      <Name>Soyuz5.Extensions.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Soyuz5.Extensions\Soyuz5.Extensions.csproj">
+      <Project>{7A5207BE-29E1-4DBB-AA67-3177365EB78A}</Project>
+      <Name>Soyuz5.Extensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
