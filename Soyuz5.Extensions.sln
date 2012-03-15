@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soyuz5.Extensions", "Soyuz5.Extensions\Soyuz5.Extensions.csproj", "{7A5207BE-29E1-4DBB-AA67-3177365EB78A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Soyuz5.Extensions.Tests", "Soyuz5.Extensions.Tests\Soyuz5.Extensions.Tests.csproj", "{D3A1BEE5-1C7A-4474-9AE7-C5B8D021A580}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A5207BE-29E1-4DBB-AA67-3177365EB78A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A5207BE-29E1-4DBB-AA67-3177365EB78A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A5207BE-29E1-4DBB-AA67-3177365EB78A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A5207BE-29E1-4DBB-AA67-3177365EB78A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3A1BEE5-1C7A-4474-9AE7-C5B8D021A580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3A1BEE5-1C7A-4474-9AE7-C5B8D021A580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3A1BEE5-1C7A-4474-9AE7-C5B8D021A580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3A1BEE5-1C7A-4474-9AE7-C5B8D021A580}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
