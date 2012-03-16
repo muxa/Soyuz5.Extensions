@@ -15,6 +15,20 @@ namespace System
         }
 
         /// <summary>
+        /// If date is no null rounds time with seconds precision (removing milliseonds and ticks). 
+        /// Otherwsie returns null
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <returns></returns>
+        public static DateTime? RoundToSecond(this DateTime? dt)
+        {
+            if (dt.HasValue)
+                return new DateTime(dt.Value.Year, dt.Value.Month, dt.Value.Day, dt.Value.Hour, dt.Value.Minute, dt.Value.Second);
+
+            return null;
+        }
+
+        /// <summary>
         /// Rounds time with minutes precision (removing seconds, milliseonds and ticks)
         /// </summary>
         /// <param name="dt"></param>
