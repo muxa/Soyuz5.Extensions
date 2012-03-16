@@ -16,6 +16,58 @@ namespace Soyuz5.Extensions.Tests
         }
 
         [Test]
+        public void GetFirstDayOfWeek_Monday()
+        {
+            Assert.AreEqual(new DateTime(2012, 3, 5), new DateTime(2012, 3, 11).GetFirstDayOfWeek(DayOfWeek.Monday), "Sunday -> Monday");
+
+            Assert.AreEqual(new DateTime(2012, 3, 12), new DateTime(2012, 3, 12).GetFirstDayOfWeek(DayOfWeek.Monday), "Monday == Monday");
+            Assert.AreEqual(new DateTime(2012, 3, 12), new DateTime(2012, 3, 13).GetFirstDayOfWeek(DayOfWeek.Monday), "Tuesday -> Monday");
+            Assert.AreEqual(new DateTime(2012, 3, 12), new DateTime(2012, 3, 14).GetFirstDayOfWeek(DayOfWeek.Monday), "Wednesday -> Monday");
+            Assert.AreEqual(new DateTime(2012, 3, 12), new DateTime(2012, 3, 15).GetFirstDayOfWeek(DayOfWeek.Monday), "Thursday -> Monday");
+            Assert.AreEqual(new DateTime(2012, 3, 12), new DateTime(2012, 3, 16).GetFirstDayOfWeek(DayOfWeek.Monday), "Friday -> Monday");
+            Assert.AreEqual(new DateTime(2012, 3, 12), new DateTime(2012, 3, 17).GetFirstDayOfWeek(DayOfWeek.Monday), "Saturday -> Monday");
+            Assert.AreEqual(new DateTime(2012, 3, 12), new DateTime(2012, 3, 18).GetFirstDayOfWeek(DayOfWeek.Monday), "Sunday -> Monday");
+
+            Assert.AreEqual(new DateTime(2012, 3, 19), new DateTime(2012, 3, 19).GetFirstDayOfWeek(DayOfWeek.Monday), "Monday == Monday");
+            Assert.AreEqual(new DateTime(2012, 3, 19), new DateTime(2012, 3, 20).GetFirstDayOfWeek(DayOfWeek.Monday), "Tuesday -> Monday");
+        }
+
+        [Test]
+        public void GetFirstDayOfWeek_Sunday()
+        {
+            Assert.AreEqual(new DateTime(2012, 3, 4), new DateTime(2012, 3, 10).GetFirstDayOfWeek(DayOfWeek.Sunday), "Saturday -> Sunday");
+            Assert.AreEqual(new DateTime(2012, 3, 11), new DateTime(2012, 3, 11).GetFirstDayOfWeek(DayOfWeek.Sunday), "Sunday == Sunday");
+
+            Assert.AreEqual(new DateTime(2012, 3, 11), new DateTime(2012, 3, 12).GetFirstDayOfWeek(DayOfWeek.Sunday), "Monday => Sunday");
+            Assert.AreEqual(new DateTime(2012, 3, 11), new DateTime(2012, 3, 13).GetFirstDayOfWeek(DayOfWeek.Sunday), "Tuesday -> Sunday");
+            Assert.AreEqual(new DateTime(2012, 3, 11), new DateTime(2012, 3, 14).GetFirstDayOfWeek(DayOfWeek.Sunday), "Wednesday -> Sunday");
+            Assert.AreEqual(new DateTime(2012, 3, 11), new DateTime(2012, 3, 15).GetFirstDayOfWeek(DayOfWeek.Sunday), "Thursday -> Sunday");
+            Assert.AreEqual(new DateTime(2012, 3, 11), new DateTime(2012, 3, 16).GetFirstDayOfWeek(DayOfWeek.Sunday), "Friday -> Sunday");
+            Assert.AreEqual(new DateTime(2012, 3, 11), new DateTime(2012, 3, 17).GetFirstDayOfWeek(DayOfWeek.Sunday), "Saturday -> Sunday");
+            Assert.AreEqual(new DateTime(2012, 3, 18), new DateTime(2012, 3, 18).GetFirstDayOfWeek(DayOfWeek.Sunday), "Sunday == Sunday");
+
+            Assert.AreEqual(new DateTime(2012, 3, 18), new DateTime(2012, 3, 19).GetFirstDayOfWeek(DayOfWeek.Sunday), "Monday => Sunday");
+            Assert.AreEqual(new DateTime(2012, 3, 18), new DateTime(2012, 3, 20).GetFirstDayOfWeek(DayOfWeek.Sunday), "Tuesday -> Sunday");
+        }
+
+        [Test]
+        public void GetFirstDayOfWeek_Tuesday()
+        {
+            Assert.AreEqual(new DateTime(2012, 3, 6), new DateTime(2012, 3, 10).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Saturday -> Tuesday");
+            Assert.AreEqual(new DateTime(2012, 3, 6), new DateTime(2012, 3, 11).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Sunday => Tuesday");
+            Assert.AreEqual(new DateTime(2012, 3, 6), new DateTime(2012, 3, 12).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Monday => Tuesday");
+            Assert.AreEqual(new DateTime(2012, 3, 13), new DateTime(2012, 3, 13).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Tuesday == Tuesday");
+
+            Assert.AreEqual(new DateTime(2012, 3, 13), new DateTime(2012, 3, 14).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Wednesday -> Tuesday");
+            Assert.AreEqual(new DateTime(2012, 3, 13), new DateTime(2012, 3, 15).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Thursday -> Tuesday");
+            Assert.AreEqual(new DateTime(2012, 3, 13), new DateTime(2012, 3, 16).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Friday -> Tuesday");
+            Assert.AreEqual(new DateTime(2012, 3, 13), new DateTime(2012, 3, 17).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Saturday -> Tuesday");
+            Assert.AreEqual(new DateTime(2012, 3, 13), new DateTime(2012, 3, 18).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Sunday => Tuesday");
+            Assert.AreEqual(new DateTime(2012, 3, 13), new DateTime(2012, 3, 19).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Monday => Tuesday");
+            Assert.AreEqual(new DateTime(2012, 3, 20), new DateTime(2012, 3, 20).GetFirstDayOfWeek(DayOfWeek.Tuesday), "Tuesday == Tuesday");
+        }
+
+        [Test]
         public void GetFirstMondayOfYearTest()
         {
             Assert.AreEqual(new DateTime(2006, 1, 2), new DateTime(2006, 1, 1).GetFirstMondayOfYear());

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace System
 {
@@ -51,6 +52,54 @@ namespace System
                 dayOfTheWeek = 7;
             dayOfTheWeek--; //here we have mon=0 & sun=6
             return date.Date.AddDays(-dayOfTheWeek);
+        }
+
+        /// <summary>
+        /// Gets day of the week that the date falls on (using current culture). Discards time component.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTime GetFirstDayOfWeek(this DateTime date)
+        {
+            return GetFirstDayOfWeek(date, CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek);
+        }
+
+        /// <summary>
+        /// Gets day of the week that the date falls on (using specified culture). Discards time component.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="cultureInfo"></param>
+        /// <returns></returns>
+        public static DateTime GetFirstDayOfWeek(this DateTime date, CultureInfo cultureInfo)
+        {
+            return GetFirstDayOfWeek(date, cultureInfo.DateTimeFormat.FirstDayOfWeek);
+        }
+
+        /// <summary>
+        /// Gets first day of the week that the date falls on (or before). Discards time component.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="firstDay"></param>
+        /// <returns></returns>
+        public static DateTime GetFirstDayOfWeek(this DateTime date, DayOfWeek firstDay)
+        {
+            // taken from first comment on http://joelabrahamsson.com/entry/getting-the-first-date-in-a-week-with-c-sharp
+
+            /* first day of week:   sun    mon   thu
+             *                           diff
+             * date day:    sun      0      6     5
+             *              mon      1      0     6
+             *              tues     2      1     0
+             *              wed      3      2     1
+             *              thu      4      3     2
+             *              fri      5      4     3
+             *              sat      6      5     4
+             */
+            
+
+            int difference = ((int)date.DayOfWeek) - ((int)firstDay);
+            difference = (7 + difference) % 7;
+            return date.Date.AddDays(-difference).Date;
         }
 
         /// <summary>

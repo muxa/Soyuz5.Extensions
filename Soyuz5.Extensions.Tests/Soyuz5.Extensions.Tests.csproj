@@ -30,6 +30,12 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Soyuz5.Extensions.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
@@ -54,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Soyuz5.Extensions.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Soyuz5.Extensions.Web\Soyuz5.Extensions.Web.csproj">
