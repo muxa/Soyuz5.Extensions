@@ -163,5 +163,26 @@ namespace Soyuz5.Extensions.Tests
         }
 
         #endregion
+
+        #region WrapLines
+
+        [Test]
+        public void WrapLines_2()
+        {
+            string longLine = "asdbefghifklmnop";
+            Assert.AreEqual(@"asdbefghif
+klmnop", longLine.WrapLines(10));
+        }
+
+        [Test]
+        public void WrapLines_3()
+        {
+            string longLine = "asdbefghifklmnop";
+            Assert.AreEqual(@"asdbefg
+hifklmn
+op", longLine.WrapLines(7));
+        }
+
+        #endregion
     }
 }

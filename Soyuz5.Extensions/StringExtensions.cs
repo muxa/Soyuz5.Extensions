@@ -124,5 +124,39 @@ namespace System.Text
 
             return sb.ToString();
         }*/
+
+        /// <summary>
+        /// Wraps string to limit line width. Note: it ignores any exising line breaks.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="lineLength"></param>
+        /// <returns></returns>
+        public static string WrapLines(this string s, int lineLength)
+        {
+            if (string.IsNullOrEmpty(s))
+                return s;
+
+            if (lineLength <= 0)
+                return s;
+
+            if (s.Length < lineLength)
+                return s;
+
+            StringBuilder sb = new StringBuilder();
+
+            int start = 0;
+            while (start + lineLength < s.Length)
+            {
+                sb.AppendLine(s.Substring(start, lineLength));
+
+                start += lineLength;
+            }
+
+            sb.AppendLine(s.Substring(start));
+
+            sb.Remove(sb.Length - 2, 2);
+
+            return sb.ToString();
+        }
     }
 }
