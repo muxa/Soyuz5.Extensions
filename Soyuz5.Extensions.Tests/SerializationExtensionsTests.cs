@@ -61,5 +61,32 @@ namespace Soyuz5.Extensions.Tests
             Assert.AreEqual(1, data[0].Id);
             Assert.AreEqual(2, data[1].Id);
         }
+
+        [Test]
+        public void SerializeToJson_Round_trip()
+        {
+            DataItem result = new DataItem() { Id = 1, Name = "Test" }.SerializeToJson().DeserializeFromJson<DataItem>();
+            Assert.AreEqual(1, result.Id);
+            Assert.AreEqual("Test", result.Name);
+        }
+
+        [Test]
+        public void SerializeToBinary_Round_trip()
+        {
+            DataItem result = new DataItem() { Id = 1, Name = "Test" }.SerializeToBinary().DeserializeFromBinary<DataItem>();
+            Assert.AreEqual(1, result.Id);
+            Assert.AreEqual("Test", result.Name);
+
+            Assert.AreEqual(230, result.SerializeToBinary().Length);
+        }
+
+        [Test]
+        public void Binary_vs_Json_serializers()
+        {
+            DataItem item = new DataItem() { Id = 1, Name = "Test" };
+
+            Assert.AreEqual(230, item.SerializeToBinary().Length);
+            Assert.AreEqual(22, item.SerializeToJson().Length);
+        }
     }
 }

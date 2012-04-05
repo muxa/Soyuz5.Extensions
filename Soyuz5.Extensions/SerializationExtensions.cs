@@ -30,6 +30,54 @@ namespace System
         }
 
         /// <summary>
+        /// Serializes object to binary form using <see cref="DataContractAttribute"/> and <see cref="DataMemberAttribute"/>
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns>Returns null if object is null.</returns>
+        public static byte[] SerializeToBinary(this object obj)
+        {
+            if (obj == null)
+            {
+                return null;
+            }
+
+            using (MemoryStream stream = new MemoryStream())
+            {
+                DataContractSerializer ser = new DataContractSerializer(obj.GetType());
+                ser.WriteObject(stream, obj);
+                stream.Position = 0;
+                using (BinaryReader br = new BinaryReader(stream))
+                {
+                    return br.ReadBytes((int) stream.Length);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Deserializes object from binary form using <see cref="DataContractAttribute"/> and <see cref="DataMemberAttribute"/>
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static T DeserializeFromBinary<T>(this byte[] data)
+        {
+            if (data == null)
+            {
+                return default(T);
+            }
+
+            using (MemoryStream stream = new MemoryStream(data))
+            {
+                stream.Position = 0;
+
+                DataContractSerializer ser = new DataContractSerializer(typeof(T));
+                T obj = (T)ser.ReadObject(stream);
+                return obj;
+            }
+        }
+
+        /// <summary>
         /// Serializes object to Json using <see cref="DataContractAttribute"/> and <see cref="DataMemberAttribute"/>
         /// </summary>
         /// <param name="obj"></param>
