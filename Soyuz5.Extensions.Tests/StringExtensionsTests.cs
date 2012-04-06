@@ -237,6 +237,21 @@ op", longLine.WrapLines(7));
             Assert.AreEqual("a, b, c and 3 more", new string[] { "a", "b", "c", "d", "e", "f" }.JoinReadable(", ", abbreviateAfter: 3));
             Assert.AreEqual("a, b, c", new string[] { "a", "b", "c"}.JoinReadable(", ", abbreviateAfter: 3));
             Assert.AreEqual("a, b, c and 1 more", new string[] { "a", "b", "c", "d" }.JoinReadable(", ", abbreviateAfter: 3));
+            Assert.AreEqual("a and 3 more", new string[] { "a", "b", "c", "d" }.JoinReadable(", ", abbreviateAfter: 1));
+            Assert.AreEqual("a, b, c, d", new string[] { "a", "b", "c", "d" }.JoinReadable(", ", abbreviateAfter: 0));
+        }
+
+        [Test]
+        public void JoinReadable_abbreviated_generic()
+        {
+            List<KeyValuePair<int, string>> list = new List<KeyValuePair<int, string>>(6);
+            list.Add(new KeyValuePair<int, string>(0, "a"));
+            list.Add(new KeyValuePair<int, string>(1, "b"));
+            list.Add(new KeyValuePair<int, string>(2, "c"));
+            list.Add(new KeyValuePair<int, string>(3, "d"));
+            list.Add(new KeyValuePair<int, string>(4, "e"));
+
+            Assert.AreEqual("a, b, c (2 more, 5 total)", list.JoinReadable(i => i.Value, ", ", abbreviateAfter: 3, abbreviationFormat: " ({0} more, {1} total)"));
         }
 
         #endregion

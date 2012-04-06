@@ -160,7 +160,7 @@ namespace System.Text
         }
 
         /// <summary>
-        /// Joins list of strings in a ice readable form, abbrreviating if necessary, and optionally using "and" instead of a standard separator for the last item.
+        /// Joins list of strings in a nice readable form, abbrreviating if necessary, and optionally using "and" instead of a standard separator for the last item.
         /// </summary>
         /// <param name="items">Items to join</param>
         /// <param name="separator">Separator to use</param>
@@ -168,36 +168,116 @@ namespace System.Text
         /// <param name="lastItemSeparator">If not abbreviated this value will be join the last item. Default null</param>
         /// <param name="abbreviationFormat">Format to abbreviate items ({0} will be replaced with the number of items remaining, {1} with total items). Default " and {0} more"</param>
         /// <returns></returns>
-        public static string JoinReadable(this string[] items, string separator, int abbreviateAfter = -1,
+        public static string JoinReadable(this IEnumerable<string> items, string separator, int abbreviateAfter = -1,
                                           string abbreviationFormat = " and {0} more", string lastItemSeparator = null)
         {
             if (items == null)
                 return null;
 
-            if (items.Length == 0)
+            IEnumerator<string> enumerator = items.GetEnumerator();
+
+            if (!enumerator.MoveNext())
                 return string.Empty;
 
             StringBuilder sb = new StringBuilder();
 
-            for (int i = 0; i < items.Length; i++)
+            bool done = false;
+            int itemsWritten = 0;
+            do
             {
-                if (abbreviateAfter > 0 && i == abbreviateAfter)
+                string current = enumerator.Current;
+
+                if (abbreviateAfter > 0 && itemsWritten == abbreviateAfter)
                 {
-                    sb.AppendFormat(abbreviationFormat, items.Length - abbreviateAfter, items.Length);
+                    int remainingCount = 1; // we already move to first of remaining items
+                    while (enumerator.MoveNext())
+                    {
+                        remainingCount++;
+                    }
+                    sb.AppendFormat(abbreviationFormat, remainingCount, itemsWritten + remainingCount);
                     break;
                 }
 
-                if (i > 0 && i == items.Length - 1 && lastItemSeparator != null)
+                bool moreItems = enumerator.MoveNext();
+
+                if (itemsWritten > 0 && lastItemSeparator != null && !moreItems)
                 {
-                    sb.Append(lastItemSeparator).Append(items[i]);
+                    sb.Append(lastItemSeparator).Append(current);
                     break;
                 }
 
-                if (i > 0)
+                if (itemsWritten > 0)
                     sb.Append(separator);
 
-                sb.Append(items[i]);
-            }
+                itemsWritten++;
+
+                sb.Append(current);
+
+                if (!moreItems)
+                    break;
+            } while (true);
+
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Joins list of items in a nice readable form, abbrreviating if necessary, and optionally using "and" instead of a standard separator for the last item.
+        /// </summary>
+        /// <param name="items">Items to join</param>
+        /// <param name="stringFunc"></param>
+        /// <param name="separator">Separator to use</param>
+        /// <param name="abbreviateAfter">If > 0 will join this number of items using a separator and abbreviate remaining ones</param>
+        /// <param name="lastItemSeparator">If not abbreviated this value will be join the last item. Default null</param>
+        /// <param name="abbreviationFormat">Format to abbreviate items ({0} will be replaced with the number of items remaining, {1} with total items). Default " and {0} more"</param>
+        /// <returns></returns>
+        public static string JoinReadable<T>(this IEnumerable<T> items, Func<T, string> stringFunc,  string separator, int abbreviateAfter = -1,
+                                          string abbreviationFormat = " and {0} more", string lastItemSeparator = null)
+        {
+            if (items == null)
+                return null;
+
+            IEnumerator<T> enumerator = items.GetEnumerator();
+
+            if (!enumerator.MoveNext())
+                return string.Empty;
+
+            StringBuilder sb = new StringBuilder();
+
+            bool done = false;
+            int itemsWritten = 0;
+            do
+            {
+                T current = enumerator.Current;
+
+                if (abbreviateAfter > 0 && itemsWritten == abbreviateAfter)
+                {
+                    int remainingCount = 1; // we already move to first of remaining items
+                    while (enumerator.MoveNext())
+                    {
+                        remainingCount++;
+                    }
+                    sb.AppendFormat(abbreviationFormat, remainingCount, itemsWritten + remainingCount);
+                    break;
+                }
+
+                bool moreItems = enumerator.MoveNext();
+
+                if (itemsWritten > 0 && lastItemSeparator != null && !moreItems)
+                {
+                    sb.Append(lastItemSeparator).Append(stringFunc(current));
+                    break;
+                }
+
+                if (itemsWritten > 0)
+                    sb.Append(separator);
+
+                itemsWritten++;
+
+                sb.Append(stringFunc(current));
+
+                if (!moreItems)
+                    break;
+            } while (true);
 
             return sb.ToString();
         }
