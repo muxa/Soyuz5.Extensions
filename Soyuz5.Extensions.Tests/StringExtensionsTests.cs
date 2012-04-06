@@ -242,6 +242,12 @@ op", longLine.WrapLines(7));
         }
 
         [Test]
+        public void JoinReadable_abbreviated_with_total()
+        {
+            Assert.AreEqual("a, b, c (7 more, 10 total)", new string[] { "a", "b", "c", "d", "e", "f" }.JoinReadable(", ", abbreviateAfter: 3, abbreviationFormat: " ({0} more, {1} total)", totalItems:10));
+        }
+
+        [Test]
         public void JoinReadable_abbreviated_generic()
         {
             List<KeyValuePair<int, string>> list = new List<KeyValuePair<int, string>>(6);
@@ -252,6 +258,19 @@ op", longLine.WrapLines(7));
             list.Add(new KeyValuePair<int, string>(4, "e"));
 
             Assert.AreEqual("a, b, c (2 more, 5 total)", list.JoinReadable(i => i.Value, ", ", abbreviateAfter: 3, abbreviationFormat: " ({0} more, {1} total)"));
+        }
+
+        [Test]
+        public void JoinReadable_abbreviated_generic_with_total()
+        {
+            List<KeyValuePair<int, string>> list = new List<KeyValuePair<int, string>>(6);
+            list.Add(new KeyValuePair<int, string>(0, "a"));
+            list.Add(new KeyValuePair<int, string>(1, "b"));
+            list.Add(new KeyValuePair<int, string>(2, "c"));
+            list.Add(new KeyValuePair<int, string>(3, "d"));
+            list.Add(new KeyValuePair<int, string>(4, "e"));
+
+            Assert.AreEqual("a, b, c (7 more, 10 total)", list.JoinReadable(i => i.Value, ", ", abbreviateAfter: 3, abbreviationFormat: " ({0} more, {1} total)", totalItems:10));
         }
 
         #endregion

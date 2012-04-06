@@ -167,9 +167,10 @@ namespace System.Text
         /// <param name="abbreviateAfter">If > 0 will join this number of items using a separator and abbreviate remaining ones</param>
         /// <param name="lastItemSeparator">If not abbreviated this value will be join the last item. Default null</param>
         /// <param name="abbreviationFormat">Format to abbreviate items ({0} will be replaced with the number of items remaining, {1} with total items). Default " and {0} more"</param>
+        /// <param name="totalItems">Heuristics so that the method does not have to enumerate though all items it order to abbreviate</param>
         /// <returns></returns>
         public static string JoinReadable(this IEnumerable<string> items, string separator, int abbreviateAfter = -1,
-                                          string abbreviationFormat = " and {0} more", string lastItemSeparator = null)
+                                          string abbreviationFormat = " and {0} more", string lastItemSeparator = null, int totalItems = -1)
         {
             if (items == null)
                 return null;
@@ -190,9 +191,17 @@ namespace System.Text
                 if (abbreviateAfter > 0 && itemsWritten == abbreviateAfter)
                 {
                     int remainingCount = 1; // we already move to first of remaining items
-                    while (enumerator.MoveNext())
+                    if (totalItems < 0)
                     {
-                        remainingCount++;
+                        while (enumerator.MoveNext())
+                        {
+                            remainingCount++;
+                        }
+                    } 
+                    else
+                    {
+                        // we have the totals, so we don't have to enumerate
+                        remainingCount = totalItems - itemsWritten;
                     }
                     sb.AppendFormat(abbreviationFormat, remainingCount, itemsWritten + remainingCount);
                     break;
@@ -229,9 +238,10 @@ namespace System.Text
         /// <param name="abbreviateAfter">If > 0 will join this number of items using a separator and abbreviate remaining ones</param>
         /// <param name="lastItemSeparator">If not abbreviated this value will be join the last item. Default null</param>
         /// <param name="abbreviationFormat">Format to abbreviate items ({0} will be replaced with the number of items remaining, {1} with total items). Default " and {0} more"</param>
+        /// <param name="totalItems">Heuristics so that the method does not have to enumerate though all items it order to abbreviate</param>
         /// <returns></returns>
         public static string JoinReadable<T>(this IEnumerable<T> items, Func<T, string> stringFunc,  string separator, int abbreviateAfter = -1,
-                                          string abbreviationFormat = " and {0} more", string lastItemSeparator = null)
+                                          string abbreviationFormat = " and {0} more", string lastItemSeparator = null, int totalItems = -1)
         {
             if (items == null)
                 return null;
@@ -252,9 +262,17 @@ namespace System.Text
                 if (abbreviateAfter > 0 && itemsWritten == abbreviateAfter)
                 {
                     int remainingCount = 1; // we already move to first of remaining items
-                    while (enumerator.MoveNext())
+                    if (totalItems < 0)
                     {
-                        remainingCount++;
+                        while (enumerator.MoveNext())
+                        {
+                            remainingCount++;
+                        }
+                    }
+                    else
+                    {
+                        // we have the totals, so we don't have to enumerate
+                        remainingCount = totalItems - itemsWritten;
                     }
                     sb.AppendFormat(abbreviationFormat, remainingCount, itemsWritten + remainingCount);
                     break;
