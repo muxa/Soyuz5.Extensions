@@ -87,5 +87,33 @@ namespace Soyuz5.Extensions.Tests
         {
             Assert.AreEqual(27, new DateTime(2011, 07, 06).GetWeekNumber());
         }
+
+        [Test]
+        public void ParseDateExact_null()
+        {
+            string s = null;
+            Assert.AreEqual(DateTime.MaxValue, s.ParseDateExact("yyyy-MM-dd", DateTime.MaxValue));
+        }
+
+        [Test]
+        public void ParseDateExact_empty()
+        {
+            string s = "";
+            Assert.AreEqual(DateTime.MaxValue, s.ParseDateExact("yyyy-MM-dd", DateTime.MaxValue));
+        }
+
+        [Test]
+        public void ParseDateExact_valid_value()
+        {
+            string s = "2012-01-01";
+            Assert.AreEqual(new DateTime(2012, 1, 1), s.ParseDateExact("yyyy-MM-dd", DateTime.MinValue));
+        }
+
+        [Test]
+        public void ParseDateExact_invalid_value()
+        {
+            string s = "as 2012-01-01";
+            Assert.AreEqual(DateTime.MaxValue, s.ParseDateExact("yyyy-MM-dd", DateTime.MaxValue));
+        }
     }
 }
