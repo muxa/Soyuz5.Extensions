@@ -3,7 +3,7 @@
     public static class EnumExtensions
     {
         /// <summary>
-        /// Tries to parse inuu string as Enum of specified type. If unsuccessful returns default value.
+        /// Tries to parse input string as Enum of specified type. If unsuccessful returns default value.
         /// </summary>
         /// <typeparam name="TEnum"></typeparam>
         /// <param name="input"></param>

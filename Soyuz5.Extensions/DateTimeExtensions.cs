@@ -165,5 +165,22 @@ namespace System
 
             return firstDay;
         }
+
+        /// <summary>
+        /// Tries to parse input string as DateTime of specified format. If unsuccessful returns default value.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="format"></param>
+        /// <param name="defaultValue"></param>
+        /// <param name="dateTimeStyles"></param>
+        /// <returns></returns>
+        public static DateTime ParseDateExact(this string s, string format, DateTime defaultValue, DateTimeStyles dateTimeStyles = DateTimeStyles.None)
+        {
+            DateTime value;
+            if (DateTime.TryParseExact(s, format, null, dateTimeStyles, out value))
+                return value;
+
+            return defaultValue;
+        }
     }
 }
