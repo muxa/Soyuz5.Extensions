@@ -184,5 +184,61 @@ op", longLine.WrapLines(7));
         }
 
         #endregion
+
+
+        #region JoinReadable
+
+        [Test]
+        public void JoinReadable_null()
+        {
+            Assert.AreEqual(null, ((string[])null).JoinReadable(", "));
+        }
+
+        [Test]
+        public void JoinReadable_empty()
+        {
+            Assert.AreEqual("", new string[] { }.JoinReadable(", "));
+        }
+
+        [Test]
+        public void JoinReadable_1()
+        {
+            Assert.AreEqual("a", new string[] { "a" }.JoinReadable(", "));
+        }
+
+        [Test]
+        public void JoinReadable_2()
+        {
+            Assert.AreEqual("a, b", new string[] { "a", "b" }.JoinReadable(", "));
+        }
+
+        [Test]
+        public void JoinReadable_2_last_sep()
+        {
+            Assert.AreEqual("a and b", new string[] { "a", "b" }.JoinReadable(", ", lastItemSeparator:" and "));
+        }
+
+        [Test]
+        public void JoinReadable_3()
+        {
+            Assert.AreEqual("a, b, c", new string[] { "a", "b", "c" }.JoinReadable(", "));
+        }
+
+        [Test]
+        public void JoinReadable_3_last_sep()
+        {
+            Assert.AreEqual("a, b and c", new string[] { "a", "b", "c" }.JoinReadable(", ", lastItemSeparator: " and "));
+        }
+
+        [Test]
+        public void JoinReadable_abbreviated()
+        {
+            Assert.AreEqual("a, b, c (3 more, 6 total)", new string[] { "a", "b", "c", "d", "e", "f" }.JoinReadable(", ", abbreviateAfter: 3, abbreviationFormat:" ({0} more, {1} total)"));
+            Assert.AreEqual("a, b, c and 3 more", new string[] { "a", "b", "c", "d", "e", "f" }.JoinReadable(", ", abbreviateAfter: 3));
+            Assert.AreEqual("a, b, c", new string[] { "a", "b", "c"}.JoinReadable(", ", abbreviateAfter: 3));
+            Assert.AreEqual("a, b, c and 1 more", new string[] { "a", "b", "c", "d" }.JoinReadable(", ", abbreviateAfter: 3));
+        }
+
+        #endregion
     }
 }

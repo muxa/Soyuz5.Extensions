@@ -158,5 +158,48 @@ namespace System.Text
 
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Joins list of strings in a ice readable form, abbrreviating if necessary, and optionally using "and" instead of a standard separator for the last item.
+        /// </summary>
+        /// <param name="items">Items to join</param>
+        /// <param name="separator">Separator to use</param>
+        /// <param name="abbreviateAfter">If > 0 will join this number of items using a separator and abbreviate remaining ones</param>
+        /// <param name="lastItemSeparator">If not abbreviated this value will be join the last item. Default null</param>
+        /// <param name="abbreviationFormat">Format to abbreviate items ({0} will be replaced with the number of items remaining, {1} with total items). Default " and {0} more"</param>
+        /// <returns></returns>
+        public static string JoinReadable(this string[] items, string separator, int abbreviateAfter = -1,
+                                          string abbreviationFormat = " and {0} more", string lastItemSeparator = null)
+        {
+            if (items == null)
+                return null;
+
+            if (items.Length == 0)
+                return string.Empty;
+
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (abbreviateAfter > 0 && i == abbreviateAfter)
+                {
+                    sb.AppendFormat(abbreviationFormat, items.Length - abbreviateAfter, items.Length);
+                    break;
+                }
+
+                if (i > 0 && i == items.Length - 1 && lastItemSeparator != null)
+                {
+                    sb.Append(lastItemSeparator).Append(items[i]);
+                    break;
+                }
+
+                if (i > 0)
+                    sb.Append(separator);
+
+                sb.Append(items[i]);
+            }
+
+            return sb.ToString();
+        }
     }
 }
