@@ -119,6 +119,16 @@ namespace Soyuz5.Extensions.Tests
         }
 
         [Test]
+        public void ReplaceTokens_multiple_tokens_together()
+        {
+            //IDictionary<string, object> replacements = new Dictionary<string, object>();
+            dynamic args = new ExpandoObject();
+            args.FirstName = "Mikhail";
+            args.LastName = "Diatchenko";
+            Assert.AreEqual("Hi MikhailDiatchenko", "Hi ##FirstName####LastName##".ReplaceTokens((IDictionary<string, object>)args));
+        }
+
+        [Test]
         public void ReplaceTokens_missing_token()
         {
             //IDictionary<string, object> replacements = new Dictionary<string, object>();
