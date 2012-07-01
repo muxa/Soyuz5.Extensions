@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Runtime.Serialization;
 using NUnit.Framework;
 
@@ -19,6 +20,47 @@ namespace Soyuz5.Extensions.Tests
 
             [DataMember]
             public string Name { get; set; }
+        }
+
+        [DataContract]
+        public class DataItem2
+        {
+            [DataMember(EmitDefaultValue = true, IsRequired = true)]
+            public int IdRequired { get; set; }
+
+            [DataMember(EmitDefaultValue = true, IsRequired = false)]
+            public int IdOptional { get; set; }
+
+            [DataMember(EmitDefaultValue = false, IsRequired = false)]
+            public int IdOptional2 { get; set; }
+
+            [DataMember(EmitDefaultValue = false, IsRequired = false)]
+            public string Name { get; set; }
+        }
+
+        [Test]
+        public void SerializeToJson_Object_options()
+        {
+            Assert.AreEqual("{\"IdOptional\":2,\"IdRequired\":1,\"Name\":\"Test\"}", new DataItem2() { IdRequired = 1, IdOptional = 2, Name = "Test" }.SerializeToJson());
+            Assert.AreEqual("{\"IdOptional\":0,\"IdRequired\":0}", new DataItem2() {}.SerializeToJson());
+        }
+
+        [Test]
+        [ExpectedException(typeof(System.Runtime.Serialization.SerializationException))]
+        public void DerializeFromJson_Object_options_missing_required()
+        {
+            DataItem2 dataItem = "{\"Name\":\"Testing\"}".DeserializeFromJson<DataItem2>();
+            Assert.AreEqual("Testing", dataItem.Name);
+        }
+
+        [Test]
+        public void DerializeFromJson_Object_options()
+        {
+            DataItem2 dataItem = "{\"IdRequired\":1,\"Name\":\"Testing\"}".DeserializeFromJson<DataItem2>();
+            Assert.AreEqual("Testing", dataItem.Name);
+            Assert.AreEqual(1, dataItem.IdRequired);
+            Assert.AreEqual(0, dataItem.IdOptional);
+            Assert.AreEqual(0, dataItem.IdOptional2);
         }
 
         [Test]
