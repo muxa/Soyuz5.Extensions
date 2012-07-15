@@ -1,4 +1,6 @@
-﻿namespace System
+﻿using System.Collections.Generic;
+
+namespace System
 {
     public static class EnumExtensions
     {
@@ -18,6 +20,23 @@
                 return value;
 
             return defaultValue;
+        }
+
+        /// <summary>
+        /// Gets an enumerable sequence of all values that are present in flags.
+        /// </summary>
+        /// <param name="flags"></param>
+        /// <returns></returns>
+        public static IEnumerable<Enum> GetFlags(this Enum flags)
+        {
+            foreach (Enum value in Enum.GetValues(flags.GetType()))
+            {
+                if (Convert.ToUInt64(value) == 0)
+                    continue;
+
+                if (flags.HasFlag(value))
+                    yield return value;
+            }
         }
     }
 }

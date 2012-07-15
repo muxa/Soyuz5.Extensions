@@ -53,6 +53,7 @@
     <Compile Include="CollectionExtensionsTests.cs" />
     <Compile Include="ConversionExtensionsTests.cs" />
     <Compile Include="DateTimeExtensionsTests.cs" />
+    <Compile Include="EnumExtensionsTests.cs" />
     <Compile Include="MiscExtensionsTests.cs" />
     <Compile Include="SerializationExtensionsTests.cs" />
     <Compile Include="DynamicHelpersTests.cs" />
