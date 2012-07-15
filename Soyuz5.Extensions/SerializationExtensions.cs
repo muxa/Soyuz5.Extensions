@@ -110,7 +110,7 @@ namespace System
         /// <exception cref="ArgumentNullException"></exception>
         public static T DeserializeFromJson<T>(this string json)
         {
-            if (json == null)
+            if (string.IsNullOrEmpty(json))
             {
                 return default(T);
             }
