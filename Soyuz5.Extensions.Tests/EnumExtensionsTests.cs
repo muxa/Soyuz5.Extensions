@@ -29,9 +29,20 @@ namespace Soyuz5.Extensions.Tests
         }
 
         [Test]
-        public void GetFlags_None()
+        public void GetFlags_NotFlags()
         {
             Assert.AreEqual(0, MyFlags.None.GetFlags().Count());
+
+            foreach (var flag in MyFlags.None.GetFlags())
+            {
+                
+            }
+        }
+
+        [Test]
+        public void GetFlags_None()
+        {
+            Assert.AreEqual(0, MyEnum.None.GetFlags().Count());
         }
 
         [Test]

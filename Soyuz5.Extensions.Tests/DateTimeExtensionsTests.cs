@@ -89,6 +89,36 @@ namespace Soyuz5.Extensions.Tests
         }
 
         [Test]
+        public void GetFirstDayOfMonth()
+        {
+            Assert.AreEqual(new DateTime(2011, 12, 1), new DateTime(2011, 12, 31).GetFirstDayOfMonth());
+            Assert.AreEqual(new DateTime(2012, 1, 1), new DateTime(2012, 1, 31).GetFirstDayOfMonth());
+            Assert.AreEqual(new DateTime(2012, 1, 1), new DateTime(2012, 1, 1).GetFirstDayOfMonth());
+            Assert.AreEqual(new DateTime(2012, 2, 1), new DateTime(2012, 2, 1).GetFirstDayOfMonth());
+        }
+
+        [Test]
+        public void GetLastDayOfMonth()
+        {
+            Assert.AreEqual(new DateTime(2012, 1, 31), new DateTime(2012, 1, 1).GetLastDayOfMonth());
+            Assert.AreEqual(new DateTime(2012, 1, 31), new DateTime(2012, 1, 31).GetLastDayOfMonth());
+            Assert.AreEqual(new DateTime(2012, 2, 29), new DateTime(2012, 2, 1).GetLastDayOfMonth());
+        }
+
+        [Test]
+        public void GetMonthsSpanned()
+        {
+            Assert.AreEqual(1, new DateTime(2012, 1, 1).GetMonthsSpanned(new DateTime(2012, 1, 1)));
+            Assert.AreEqual(1, new DateTime(2012, 1, 1).GetMonthsSpanned(new DateTime(2012, 1, 31)));
+            Assert.AreEqual(2, new DateTime(2012, 1, 1).GetMonthsSpanned(new DateTime(2012, 2, 1)));
+
+            // reversed
+            Assert.AreEqual(1, new DateTime(2012, 1, 2).GetMonthsSpanned(new DateTime(2012, 1, 1)));
+            Assert.AreEqual(2, new DateTime(2012, 1, 1).GetMonthsSpanned(new DateTime(2011, 12, 31)));
+            Assert.AreEqual(3, new DateTime(2012, 1, 1).GetMonthsSpanned(new DateTime(2011, 11, 30)));
+        }
+
+        [Test]
         public void ParseDateExact_null()
         {
             string s = null;

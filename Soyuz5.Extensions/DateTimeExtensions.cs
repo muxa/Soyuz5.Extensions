@@ -113,6 +113,34 @@ namespace System
         }
 
         /// <summary>
+        /// Gets last date of the month that the date. Discards time component.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns></returns>
+        public static DateTime GetLastDayOfMonth(this DateTime date)
+        {
+            return new DateTime(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month), 0, 0, 0, date.Kind);
+        }
+
+        /// <summary>
+        /// Gets number of calendar months that from and to dates touch. E.g. 31/01/2012 - 1/03/2012 touch 3 months, 1/02/2012 - 1/03/2012 touch 2 months, 1/02/2012 - 28/02/2012 touch 1 month
+        /// </summary>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"> </param>
+        /// <returns></returns>
+        public static int GetMonthsSpanned(this DateTime fromDate, DateTime toDate)
+        {
+            if (toDate > fromDate)
+            {
+                return (toDate.Month - fromDate.Month) + (toDate.Year - fromDate.Year)*12 + 1;
+            }
+            else
+            {
+                return (fromDate.Month - toDate.Month) + (fromDate.Year - toDate.Year)*12 + 1;
+            }
+        }
+
+        /// <summary>
         /// Returns true if the <paramref name="date"/> falls on a weekend.
         /// </summary>
         /// <param name="date"></param>
