@@ -141,6 +141,46 @@ namespace System
         }
 
         /// <summary>
+        /// Checks if the two dates fall on the same week.
+        /// </summary>
+        /// <param name="date1"></param>
+        /// <param name="date2"> </param>
+        /// <returns></returns>
+        public static bool IsSameWeek(this DateTime date1, DateTime date2)
+        {
+            DateTime weekStart = date1.GetFirstDayOfWeek();
+            if (date2 < weekStart)
+                return false;
+
+            if (date2 >= weekStart.AddDays(7))
+                return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks if the two dates fall on the same month.
+        /// </summary>
+        /// <param name="date1"></param>
+        /// <param name="date2"> </param>
+        /// <returns></returns>
+        public static bool IsSameMonth(this DateTime date1, DateTime date2)
+        {
+            return date1.Year == date2.Year && date1.Month == date2.Month;
+        }
+
+        /// <summary>
+        /// Checks if the two dates fall on the same year.
+        /// </summary>
+        /// <param name="date1"></param>
+        /// <param name="date2"> </param>
+        /// <returns></returns>
+        public static bool IsSameYear(this DateTime date1, DateTime date2)
+        {
+            return date1.Year == date2.Year;
+        }
+
+        /// <summary>
         /// Returns true if the <paramref name="date"/> falls on a weekend.
         /// </summary>
         /// <param name="date"></param>
