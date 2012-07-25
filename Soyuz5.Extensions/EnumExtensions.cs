@@ -89,6 +89,29 @@ namespace System
         }
 
         /// <summary>
+        /// Gets custom attribute for an enum value if available. Otherwise returns null. 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static TAttribute GetEnumAttribute<TAttribute>(this Enum value)
+            where TAttribute : Attribute
+        {
+            Type enumType = value.GetType();
+            string valueName = Enum.GetName(enumType, value);
+            if (valueName == null)
+            {
+                // non-standard or multiple values
+                return null;
+            }
+            MemberInfo[] members = enumType.GetMember(valueName);
+            if (members.Length > 0)
+            {
+                return (TAttribute)Attribute.GetCustomAttribute(members[0], typeof(TAttribute));
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Returns list of value/name pairs for all available enum values. 
         /// Key contains an integer representation of enum value and value is the name or description (set via DescriptionAttribute)
         /// </summary>
@@ -142,6 +165,105 @@ namespace System
                 }
             }
             return list;
+        }
+
+        /// <summary>
+        /// Returns a sequence of enum values sorted by the custom attributes that define sorting order attached to enum values. 
+        /// Custom attribute must implement <see cref="IComparable"/>. 
+        /// If no sort attribute is attached to an enum values, those values will appear on top of the list and will be sorted by ther values.
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> SortEnums<T, TSortAttribute>(this Type enumType)
+            where T : struct
+            where TSortAttribute : Attribute, IComparable
+        {
+            if (!enumType.IsEnum)
+                throw new ArgumentOutOfRangeException("enumType", "Must be Enum");
+
+            var tempList = new List<Tuple<T, TSortAttribute>>();
+            foreach (Enum value in Enum.GetValues(enumType))
+            {
+                var item = new Tuple<T, TSortAttribute>(
+                    (T)(object)value,
+                    value.GetEnumAttribute<TSortAttribute>());
+                tempList.Add(item);
+            }
+            tempList.Sort((a, b) =>
+            {
+                if (a.Item2 == null && b.Item2 == null)
+                    return ((Enum)(object)a.Item1).CompareTo(b.Item1);
+                if (a.Item2 == null)
+                    return -1;
+                if (b.Item2 == null)
+                    return 1;
+                return a.Item2.CompareTo(b.Item2);
+            });
+            return tempList.Select(x => x.Item1).ToArray();
+        }
+
+        /// <summary>
+        /// Returns a sequence of enum values sorted by the comparer. 
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <param name="comparison"> </param>
+        /// <returns></returns>
+        public static IEnumerable<T> SortEnums<T>(this Type enumType, Comparison<T> comparison)
+            where T : struct
+        {
+            if (!enumType.IsEnum)
+                throw new ArgumentOutOfRangeException("enumType", "Must be Enum");
+
+            var tempList = new List<T>();
+            foreach (T value in Enum.GetValues(enumType))
+            {
+                tempList.Add(value);
+            }
+            tempList.Sort(comparison);
+            return tempList.ToArray();
+        }
+
+        /// <summary>
+        /// Returns list of value/name pairs for all available enum values. 
+        /// Key contains enum value casted to T and value is the name or description (set via DescriptionAttribute). 
+        /// Items are sorted by the custom attributes that define sorting order attached to enum values. 
+        /// Custom attribute must implement <see cref="IComparable"/>. 
+        /// If no sort attribute is attached to an enum values, those values will appear on top of the list and will be sorted by ther values.
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <param name="useDescription">If true will use value desription if available</param>
+        /// <returns></returns>
+        public static IList<KeyValuePair<T, string>> GetEnumBindableList<T,TSortAttribute>(this Type enumType, bool useDescription = true)
+            where T : struct
+            where TSortAttribute : Attribute, IComparable
+        {
+            return
+                enumType.SortEnums<T, TSortAttribute>().Select(
+                    x => new KeyValuePair<T, string>(x,
+                                                     useDescription
+                                                         ? ((Enum) (object) x).GetEnumDescription()
+                                                         : Enum.GetName(enumType, x))).ToList();
+        }
+
+        /// <summary>
+        /// Returns list of value/name pairs for all available enum values. 
+        /// Key contains enum value casted to T and value is the name or description (set via DescriptionAttribute). 
+        /// Items are sorted by the comparer 
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <param name="comparison"> </param>
+        /// <param name="useDescription">If true will use value desription if available</param>
+        /// <returns></returns>
+        public static IList<KeyValuePair<T, string>> GetEnumBindableList<T>(this Type enumType, Comparison<T> comparison,
+            bool useDescription = true)
+            where T : struct
+        {
+            return
+                enumType.SortEnums<T>(comparison).Select(
+                    x => new KeyValuePair<T, string>(x,
+                                                     useDescription
+                                                         ? ((Enum) (object) x).GetEnumDescription()
+                                                         : Enum.GetName(enumType, x))).ToList();
         }
 
         /// <summary>
