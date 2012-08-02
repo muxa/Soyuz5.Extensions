@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Dynamic;
+using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -298,6 +300,106 @@ namespace System.Text
             } while (true);
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Generates next item in sequence using a text prefix and a numberical suffix. 
+        /// E.g. prefix of "SOYUZ5", lenght of 5 and prefix length of 3 will generate "SOY001" on empty sequence, or if no items with prefix "SOY" exists..
+        /// </summary>
+        /// <param name="existingItems">Sequence of existing items. If null or empty will create first item.</param>
+        /// <param name="prefixSeed">Prefix to use in the generate code. This can be an arbitrary "seed" which will be trimmed to appropriate width to be used in code.</param>
+        /// <param name="length">Generated string length</param>
+        /// <param name="prefixLength">Maximum length of the prefix part in generated string. If 0 will not use a prefix</param>
+        /// <param name="ignoreCase">If true will ignore case when searching for existing code with specified prefix.</param>
+        /// <returns></returns>
+        public static string SequentialNext(this IEnumerable<string> existingItems, string prefixSeed, int length, int prefixLength, bool ignoreCase = true)
+        {
+            if (length < prefixLength)
+                throw new ArgumentOutOfRangeException("prefixLength", "Prefix length must not be greater than length");
+
+            if (prefixSeed == null)
+                prefixSeed = string.Empty;
+
+            // prepare prefix
+            prefixSeed = Regex.Replace(prefixSeed, @"\W", "");
+
+            string prefix = prefixSeed.Length > prefixLength
+                              ? prefixSeed.Substring(0, prefixLength)
+                              : prefixSeed;
+
+            string[] strings = existingItems != null ? existingItems.ToArray() : new string[0];
+
+            var tempResult = GetCode(strings, prefix, length, prefixLength, ignoreCase);
+            // it may be that the lookup found existing item and the next item would add another digit to the number,
+            // resulting in a shorter code part, which should also be checked for duplicates
+            while (tempResult.Item1.Length < prefix.Length)
+            {
+                prefix = tempResult.Item1;
+                tempResult = GetCode(strings, prefix, length, prefixLength, ignoreCase);
+            }
+            return tempResult.Item2;
+        }
+
+        private static Tuple<string, string> GetCode(string[] existingStrings, string prefix, int resultLength, int prefixLength, bool ignoreCase)
+        {
+            string matchPattern;
+            if (prefix.Length == resultLength)
+            {
+                // search for entire code without number
+                matchPattern = '^' + Regex.Escape(prefix) + '$';
+            }
+            else
+            {
+                matchPattern = '^' + Regex.Escape(prefix) + @"(\d+)$";
+            }
+
+            RegexOptions options = ignoreCase ? RegexOptions.IgnoreCase : RegexOptions.None;
+
+            var matchingCodes =
+                existingStrings.Where(c => c.StartsWith(prefix) && Regex.IsMatch(c, matchPattern, options))
+                    .ToArray();
+
+            int nextCounter = 0;
+
+            if (matchingCodes.Length > 0)
+            {
+                if (prefix.Length == resultLength)
+                {
+                    nextCounter = 1;
+                }
+                else
+                {
+                    nextCounter =
+                        matchingCodes
+                            .Select(c => int.Parse(Regex.Match(c, matchPattern, options).Groups[1].Value))
+                            .Max() + 1;
+                }
+            }
+            else if (prefix.Length < resultLength)
+            {
+                nextCounter = 1;
+            }
+
+            if (nextCounter == 0)
+            {
+                // result is the prefix on its own, since there's no number part
+                return new Tuple<string, string>(prefix, prefix);
+            }
+
+            string numberPart = nextCounter.ToString(CultureInfo.InvariantCulture);
+
+            // pad numbers with 0
+            while (numberPart.Length + prefix.Length < resultLength)
+            {
+                numberPart = '0' + numberPart;
+            }
+            // shorten code part is too long (if number is too high)
+            while (prefix.Length > 0 && numberPart.Length + prefix.Length > resultLength)
+            {
+                prefix = prefix.Remove(prefix.Length - 1, 1);
+            }
+            //return code + numberPart;
+            return new Tuple<string, string>(prefix, prefix + numberPart);
         }
     }
 }

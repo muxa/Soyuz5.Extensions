@@ -284,5 +284,102 @@ op", longLine.WrapLines(7));
         }
 
         #endregion
+
+        #region SequentialNext
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void SequentialNext_Length_Less_Than_PrefixLength()
+        {
+            string[] items = new string[0];
+            Assert.AreEqual("ACR001", items.SequentialNext("ACRONYM", 6, 7));
+        }
+
+        [Test]
+        public void SequentialNext_No_Prefix()
+        {
+            string[] items = null;
+            Assert.AreEqual("000001", items.SequentialNext("ACRONYM", 6, 0));
+            Assert.AreEqual("000001", items.SequentialNext("", 6, 3));
+        }
+
+        [Test]
+        public void SequentialNext_Any_Prefix()
+        {
+            string[] items = null;
+            Assert.AreEqual("ABC001", items.SequentialNext("A B C", 6, 3));
+        }
+
+        [Test]
+        public void SequentialNext_Prefix_Sizes()
+        {
+            string[] items = null;
+            Assert.AreEqual("A00001", items.SequentialNext("ACRONYM", 6, 1));
+            Assert.AreEqual("AC0001", items.SequentialNext("ACRONYM", 6, 2));
+            Assert.AreEqual("ACR001", items.SequentialNext("ACRONYM", 6, 3));
+            Assert.AreEqual("ACRO01", items.SequentialNext("ACRONYM", 6, 4));
+            Assert.AreEqual("ACRON1", items.SequentialNext("ACRONYM", 6, 5));
+            Assert.AreEqual("ACRONY", items.SequentialNext("ACRONYM", 6, 6));
+        }
+
+        [Test]
+        public void SequentialNext_First()
+        {
+            string[] items = null;
+            Assert.AreEqual("ACR001", items.SequentialNext("ACRONYM", 6, 3));
+            Assert.AreEqual("ACR001", items.SequentialNext("ACR", 6, 3));
+            Assert.AreEqual("AC0001", items.SequentialNext("AC", 6, 3));
+            Assert.AreEqual("A00001", items.SequentialNext("A", 6, 3));
+            Assert.AreEqual("000001", items.SequentialNext("", 6, 3));
+        }
+
+        [Test]
+        public void SequentialNext_Next()
+        {
+            string[] items = new[] { "ACR001", "AC0001", "A00001", "000001", "ACRONY" };
+            Assert.AreEqual("ACRON1", items.SequentialNext("ACRONYM", 6, 6));
+            Assert.AreEqual("ACRON1", items.SequentialNext("ACRONYM", 6, 5));
+            Assert.AreEqual("ACR002", items.SequentialNext("ACRONYM", 6, 3));
+            Assert.AreEqual("ACR002", items.SequentialNext("ACR", 6, 3));
+            Assert.AreEqual("AC0002", items.SequentialNext("AC", 6, 3));
+            Assert.AreEqual("A00002", items.SequentialNext("A", 6, 3));
+            Assert.AreEqual("000002", items.SequentialNext("", 6, 3));
+        }
+
+        [Test]
+        public void SequentialNext_Many()
+        {
+            string[] items = new[] { "ACR010", "ACR001", "AC0020", "AC0001", "A00030", "A00001", "000040", "000001", "ACRONY", "ACRON1" };
+            Assert.AreEqual("ACRON2", items.SequentialNext("ACRONYM", 6, 6));
+            Assert.AreEqual("ACRON2", items.SequentialNext("ACRONYM", 6, 5));
+            Assert.AreEqual("ACR011", items.SequentialNext("ACRONYM", 6, 3));
+            Assert.AreEqual("ACR011", items.SequentialNext("ACR", 6, 3));
+            Assert.AreEqual("AC0021", items.SequentialNext("AC", 6, 3));
+            Assert.AreEqual("A00031", items.SequentialNext("A", 6, 3));
+            Assert.AreEqual("000041", items.SequentialNext("", 6, 3));
+        }
+
+        [Test]
+        public void SequentialNext_Number_Overflow()
+        {
+            string[] items = new[] { "ACR999" };
+            Assert.AreEqual("AC0001", items.SequentialNext("ACRONYM", 6, 3));
+        }
+
+        [Test]
+        public void SequentialNext_Number_Overflow_More_Exists()
+        {
+            string[] items = new[] { "ACR999", "AC1000" };
+            Assert.AreEqual("AC1001", items.SequentialNext("ACRONYM", 6, 3));
+        }
+
+        [Test]
+        public void SequentialNext_Number_Overflow_More_Exists_Multiple_Levels()
+        {
+            string[] items = new[] { "ACR999", "AC1000", "AC9999", "A10000", "A99999", "100000"  };
+            Assert.AreEqual("100001", items.SequentialNext("ACRONYM", 6, 3));
+        }
+
+        #endregion
     }
 }
