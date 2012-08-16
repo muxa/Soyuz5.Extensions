@@ -26,12 +26,21 @@
         /// <param name="count">If -1 will remove all remaining elements since fromIndex</param>
         public static void RemoveRange<T>(this IList<T> list, int fromIndex, int count = -1)
         {
+            if (fromIndex < 0)
+                throw new ArgumentOutOfRangeException("fromIndex", "Must be non-negative");
+
+            if (count == 0)
+                return;
+
             if (fromIndex == 0 && (count == -1 || count == list.Count))
             {
                 list.Clear();
             }
             else
             {
+                if ((fromIndex + count) > list.Count)
+                    throw new ArgumentOutOfRangeException("count", "Trying to remove too many items");
+
                 for (int i = count - 1; i >= 0; i--)
                 {
                     list.RemoveAt(fromIndex + i);
@@ -47,6 +56,8 @@
         /// <param name="predicate">Return true to remove</param>
         public static void Remove<T>(this IList<T> list, Func<T, bool> predicate)
         {
+            if (list.Count== 0)
+                return;
             int index = list.Count - 1;
             do
             {

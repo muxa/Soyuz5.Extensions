@@ -14,6 +14,16 @@ namespace Soyuz5.Extensions.Tests
         #region Remove
 
         [Test]
+        public void Remove_with_predicate_empty_list()
+        {
+            List<int> list = new List<int>();
+
+            list.Remove(i => false);
+
+            Assert.AreEqual(0, list.Count);
+        }
+
+        [Test]
         public void Remove_with_predicate_none()
         {
             List<int> list = new List<int>();
@@ -96,6 +106,38 @@ namespace Soyuz5.Extensions.Tests
         #region RemoveRange
 
         [Test]
+        public void RemoveRange_empty_list()
+        {
+            IList<int> list = new List<int>();
+
+            list.RemoveRange(0);
+
+            Assert.AreEqual(0, list.Count);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void RemoveRange_negative_index()
+        {
+            IList<int> list = new List<int>();
+
+            list.RemoveRange(-1);
+
+            Assert.AreEqual(0, list.Count);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void RemoveRange_empty_list_1()
+        {
+            IList<int> list = new List<int>();
+
+            list.RemoveRange(0, 1);
+
+            Assert.AreEqual(0, list.Count);
+        }
+
+        [Test]
         public void RemoveRange_all_1()
         {
             IList<int> list = new List<int>();
@@ -167,6 +209,35 @@ namespace Soyuz5.Extensions.Tests
             Assert.AreEqual(2, list.Count);
             Assert.AreEqual(1, list[0]);
             Assert.AreEqual(4, list[1]);
+        }
+
+        [Test]
+        public void RemoveRange_0()
+        {
+            IList<int> list = new List<int>();
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+            list.Add(4);
+
+            list.RemoveRange(1, 0);
+
+            Assert.AreEqual(4, list.Count);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void RemoveRange_outside()
+        {
+            IList<int> list = new List<int>();
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+            list.Add(4);
+
+            list.RemoveRange(4, 1);
+
+            Assert.AreEqual(4, list.Count);
         }
 
         #endregion
