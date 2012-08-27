@@ -66,8 +66,10 @@ namespace System.Text
         /// </summary>
         /// <param name="template">Tokens should be embedded as ##TokenName##. Formatting is supported via ##TokenName:f## where f is standard format value (e.g. d for dates)</param>
         /// <param name="replacements">Keys are token names, values are values. Supports <see cref="ExpandoObject"/> too. To pass a generic objects use <see cref="DynamicHelper.ToDictionary"/> </param>
+        /// <param name="openingToken">String to mark the beginning of the token. Default "##".</param>
+        /// <param name="closingToken">String to mark the ending of the token. Default "##".</param>
         /// <returns></returns>
-        public static string ReplaceTokens(this string template, IDictionary<string, object> replacements)
+        public static string ReplaceTokens(this string template, IDictionary<string, object> replacements, string openingToken = "##", string closingToken = "##")
         {
             if (replacements == null)
             {
@@ -76,14 +78,14 @@ namespace System.Text
             if (string.IsNullOrEmpty(template)) return template;
 
             // parse the message into an array of tokens
-            Regex regex = new Regex("(##[^#]+##)");
-            Regex formatRe = new Regex("##([^#:]+):([^#]+)##");
+            Regex regex = new Regex("(" + Regex.Escape(openingToken) + ".+?" + Regex.Escape(closingToken) + ")");
+            Regex formatRe = new Regex(Regex.Escape(openingToken) + "(.+?):(.+?)" + Regex.Escape(closingToken));
             string[] tokens = regex.Split(template);
 
             IDictionary<string, object> newRep = new Dictionary<string, object>(replacements.Count);
             foreach (KeyValuePair<string, object> keyValuePair in replacements)
             {
-                newRep.Add("##" + keyValuePair.Key.ToUpper() + "##", keyValuePair.Value);
+                newRep.Add(openingToken + keyValuePair.Key.ToUpper() + closingToken, keyValuePair.Value);
             }
 
             // the new message from the tokens
@@ -101,7 +103,7 @@ namespace System.Text
                     Match match = formatRe.Match(token);
                     if (match.Success)
                     {
-                        string t = "##" + match.Groups[1].Value.ToUpper() + "##";
+                        string t = openingToken + match.Groups[1].Value.ToUpper() + closingToken;
                         if (newRep.ContainsKey(t))
                         {
                             sb.AppendFormat("{0:" + match.Groups[2].Value + "}", newRep[t]);

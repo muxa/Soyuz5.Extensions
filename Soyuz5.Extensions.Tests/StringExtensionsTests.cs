@@ -100,6 +100,17 @@ namespace Soyuz5.Extensions.Tests
         }
 
         [Test]
+        public void ReplaceTokens_custom_token_chars()
+        {
+            //IDictionary<string, object> replacements = new Dictionary<string, object>();
+            dynamic args = new ExpandoObject();
+            args.FirstName = "Mikhail";
+            Assert.AreEqual("Hi Mikhail", "Hi [FirstName]".ReplaceTokens((IDictionary<string, object>)args, "[", "]"));
+            Assert.AreEqual("Hi Mikhail", "Hi {FirstName}".ReplaceTokens((IDictionary<string, object>)args, "{", "}"));
+            Assert.AreEqual("Hi Mikhail", "Hi <<FirstName>>".ReplaceTokens((IDictionary<string, object>)args, "<<", ">>"));
+        }
+
+        [Test]
         public void ReplaceTokens_case_insensitive()
         {
             //IDictionary<string, object> replacements = new Dictionary<string, object>();
@@ -126,6 +137,15 @@ namespace Soyuz5.Extensions.Tests
             args.FirstName = "Mikhail";
             args.LastName = "Diatchenko";
             Assert.AreEqual("Hi MikhailDiatchenko", "Hi ##FirstName####LastName##".ReplaceTokens((IDictionary<string, object>)args));
+        }
+
+        [Test]
+        public void ReplaceTokens_token_with_space()
+        {
+            IDictionary<string, object> replacements = new Dictionary<string, object>();
+            replacements.Add("Full Name", "Mikhail Diatchenko");
+
+            Assert.AreEqual("Hi Mikhail Diatchenko", "Hi ##Full Name##".ReplaceTokens(replacements));
         }
 
         [Test]
