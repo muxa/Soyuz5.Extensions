@@ -49,5 +49,39 @@ namespace System.Collections.Generic
 
             return defaultValue;
         }*/
+
+        public static IEnumerable<T> Distinct<T>(this IEnumerable<T> seq, Func<T,T,bool> comparer)
+        {
+            return seq.Distinct(new LambdaComparer<T>(comparer));
+        }
+    }
+
+    internal sealed class LambdaComparer<T> : IEqualityComparer<T>
+    {
+        private Func<T, T, bool> _del;
+        private IEqualityComparer<T> _comparer;
+
+        public LambdaComparer(Func<T, T, bool> del)
+        {
+            _del = del;
+            _comparer = EqualityComparer<T>.Default;
+        }
+
+        public bool Equals(T left, T right)
+        {
+            return _del(left, right);
+        }
+
+        /// <summary>
+        /// Returns a hash code for the specified object.
+        /// </summary>
+        /// <returns>
+        /// A hash code for the specified object.
+        /// </returns>
+        /// <param name="obj">The <see cref="T:System.Object"/> for which a hash code is to be returned.</param><exception cref="T:System.ArgumentNullException">The type of <paramref name="obj"/> is a reference type and <paramref name="obj"/> is null.</exception>
+        public int GetHashCode(T obj)
+        {
+            return _comparer.GetHashCode(obj);
+        }
     }
 }
