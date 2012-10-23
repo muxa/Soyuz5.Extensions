@@ -186,7 +186,6 @@ namespace System.Text
 
             StringBuilder sb = new StringBuilder();
 
-            bool done = false;
             int itemsWritten = 0;
             do
             {
@@ -257,7 +256,6 @@ namespace System.Text
 
             StringBuilder sb = new StringBuilder();
 
-            bool done = false;
             int itemsWritten = 0;
             do
             {
