@@ -26,19 +26,18 @@
         }
 
         /// <summary>
-        /// Tries to parse input string as int. If unsuccessful returns default value.
+        /// Tries to parse input string as int. If unsuccessful returns null.
         /// </summary>
         /// <param name="value"></param>
-        /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public static int? Parse(this string value, int? defaultValue = null)
+        public static int? ParseInt(this string value)
         {
             int result;
 
             if (int.TryParse(value, out result))
                 return result;
 
-            return defaultValue;
+            return null;
         }
 
         /// <summary>
@@ -58,19 +57,18 @@
         }
 
         /// <summary>
-        /// Tries to parse input string as decimal. If unsuccessful returns default value.
+        /// Tries to parse input string as decimal. If unsuccessful returns null.
         /// </summary>
         /// <param name="value"></param>
-        /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public static decimal? Parse(this string value, decimal? defaultValue = null)
+        public static decimal? ParseDecimal(this string value)
         {
             decimal result;
 
             if (decimal.TryParse(value, out result))
                 return result;
 
-            return defaultValue;
+            return null;
         }
 
         /// <summary>
@@ -90,19 +88,18 @@
         }
 
         /// <summary>
-        /// Tries to parse input string as double. If unsuccessful returns default value.
+        /// Tries to parse input string as double. If unsuccessful returns null.
         /// </summary>
         /// <param name="value"></param>
-        /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public static double? Parse(this string value, double? defaultValue = null)
+        public static double? ParseDouble(this string value)
         {
             double result;
 
             if (double.TryParse(value, out result))
                 return result;
 
-            return defaultValue;
+            return null;
         } 
     }
 }
