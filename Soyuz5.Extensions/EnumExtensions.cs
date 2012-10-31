@@ -267,6 +267,23 @@ namespace System
         }
 
         /// <summary>
+        /// Returns a sequence of value/attribute pairs for all available enum values. 
+        /// Key contains enum value casted to T and value is the attribute attached to that value 
+        /// </summary>
+        /// <param name="enumType"></param>
+        /// <returns></returns>
+        public static IEnumerable<KeyValuePair<T, TAttribute>> GetEnumAttributes<T, TAttribute>(this Type enumType)
+            where T : struct
+            where TAttribute : Attribute
+        {
+            foreach (T value in Enum.GetValues(enumType))
+            {
+                yield return new KeyValuePair<T, TAttribute>(value,
+                                                             ((Enum) (object) value).GetEnumAttribute<TAttribute>());
+            }
+        }
+
+        /// <summary>
         /// Count number of flags in enum. 
         /// A more readable version could be written based on http://www.dotnetperls.com/bitcount http://gurmeet.net/puzzles/fast-bit-counting-routines/
         /// </summary>
