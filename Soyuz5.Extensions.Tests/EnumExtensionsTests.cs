@@ -303,5 +303,18 @@ namespace Soyuz5.Extensions.Tests
             Assert.AreEqual(MyFlags.Two, list[3].Key);
             Assert.AreEqual(MyFlags.One, list[4].Key);
         }
+
+        [Test]
+        public void GetEnumAttributes()
+        {
+            var attributes = typeof (MyFlags).GetEnumAttributes<MyFlags, DisplayAttribute>().ToList();
+            Assert.AreEqual(5, attributes.Count);
+            Assert.IsNull(attributes[0].Value);
+            Assert.IsNotNull(attributes[1].Value);
+            Assert.AreEqual("1", attributes[1].Value.Description);
+            Assert.IsNull(attributes[2].Value);
+            Assert.IsNull(attributes[3].Value);
+            Assert.IsNull(attributes[4].Value);
+        }
     }
 }
