@@ -87,5 +87,25 @@
             }
             return newValue;
         }
+
+        /// <summary>
+        /// Checks if the obj is if specified type T and the predicate is satisfied. 
+        /// </summary>
+        /// <typeparam name="T">Type that the object must be of.</typeparam>
+        /// <param name="obj">Object to check</param>
+        /// <param name="predicate">If the object is of type T</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if obj or predicate are null</exception>
+        public static bool SafeCastedCheck<T>(this object obj, Func<T, bool> predicate) where T : class
+        {
+            if (obj == null) throw new ArgumentNullException("obj");
+            if (predicate == null) throw new ArgumentNullException("predicate");
+
+            var casted = obj as T;
+            if (casted == null)
+                return false;
+
+            return predicate(casted);
+        }
     }
 }
